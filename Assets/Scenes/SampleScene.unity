@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incrementor: 5
-  breakPoint: 200
+  breakPoint: 500
   coolGuy: 100
 --- !u!4 &1846259610
 Transform:
