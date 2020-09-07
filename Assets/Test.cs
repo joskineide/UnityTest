@@ -10,6 +10,9 @@ public class Test : MonoBehaviour
      [SerializeField] private int incrementor = 1;
 
      [SerializeField] private int breakPoint = 100;
+	
+	
+     [SerializeField] private int coolGuy = 100;
 
     // Start is called before the first frame update
     void Start()
