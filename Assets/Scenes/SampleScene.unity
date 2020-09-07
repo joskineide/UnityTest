@@ -236,7 +236,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incrementor: 5
-  breakPoint: 680
+  breakPoint: 200
+  coolGuy: 100
 --- !u!4 &1846259610
 Transform:
   m_ObjectHideFlags: 0
