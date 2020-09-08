@@ -5,13 +5,14 @@ using UnityEngine;
 public class TurretScript : MonoBehaviour
 {
 
+    private enum TurretTargetTypeEnum {First, Last, Close, Far, Healthy, Weak};
     [SerializeField] private float fireSpeed = 1;
     [SerializeField] private float damage = 1;
     [SerializeField] private float projectyleSpeed = 1;
     [SerializeField] private int pierce = 1;
     [SerializeField] private float radious = 1;
     [SerializeField] private float cooldown = 0;
-    [SerializeField] enum turretTargetType {Close, Far, Healthy, Weak};
+    [SerializeField] private TurretTargetTypeEnum turretTargetType =  TurretTargetTypeEnum.Close;
     [SerializeField] private GameObject currentEnemy;
     [SerializeField] private GameObject projectyle;
     [SerializeField] private EnemyHandler enemyHandler;
@@ -20,7 +21,8 @@ public class TurretScript : MonoBehaviour
     void Start()
     {
         enemyHandler = FindObjectOfType<EnemyHandler>();
-        updateAtributes(fireSpeed, damage, projectyleSpeed, radious);
+        updateAtributes(fireSpeed, damage, projectyleSpeed, radious);        
+
     }
 
     // Update is called once per frame
@@ -33,19 +35,84 @@ public class TurretScript : MonoBehaviour
 
         currentEnemy = searchForTarget();
 
-        if(currentEnemy.Equals(null)){
+        if(currentEnemy == null){
             return;
         }
 
         lookAtTarget(currentEnemy.transform.position);
 
-        Instantiate<GameObject>(projectyle, transform.position, this.transform.rotation); 
+        fire();
 
-        cooldown = fireSpeed;
     }
 
     private GameObject searchForTarget(){
-        return enemyHandler.getEnemies()[0];
+
+        GameObject target = null;
+
+        foreach(GameObject enemy in enemyHandler.getEnemies()){
+            if(getDistance(enemy) < radious){
+                target = checkTarget(target, enemy);
+            }
+        }
+
+        return target;
+    }
+
+    private float getDistance(GameObject other){
+        return Mathf.Abs(other.transform.position.x - this.transform.position.x) + 
+            Mathf.Abs(other.transform.position.y - this.transform.position.y);
+    }
+
+    private GameObject checkTarget(GameObject currentTarget, GameObject newTarget){
+        if(currentTarget == null){
+            return newTarget;
+        }
+
+        switch(turretTargetType)
+        {
+            case TurretTargetTypeEnum.Close:
+            {
+                if(getDistance(newTarget) < getDistance(currentTarget)){
+                    return newTarget;
+                }
+                break;
+            }
+            case TurretTargetTypeEnum.Far:
+            {
+                if(getDistance(newTarget) > getDistance(currentTarget)){
+                    return newTarget;
+                }
+                break;
+            }
+            case TurretTargetTypeEnum.Healthy:
+            {
+                if(newTarget.GetComponent<EnemyScript>().getHealth() > 
+                    currentTarget.GetComponent<EnemyScript>().getHealth()){
+                    return newTarget;
+                }
+                break;
+            }
+            case TurretTargetTypeEnum.Weak:
+            {
+                if(newTarget.GetComponent<EnemyScript>().getHealth() <
+                    currentTarget.GetComponent<EnemyScript>().getHealth()){
+                    return newTarget;
+                }
+                break;
+            }
+             case TurretTargetTypeEnum.First: //TODO
+            {
+                return currentTarget;
+                break;
+            }
+             case TurretTargetTypeEnum.Last: //TODO
+            {
+                return newTarget;
+                break;
+            }
+            default: return currentTarget;
+        }
+        return currentTarget;
     }
 
     private void lookAtTarget(Vector3 enemyPosition){
@@ -54,13 +121,21 @@ public class TurretScript : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
-    private void updateAtributes(float fireSpeed, float damage, float bulletSpeed, float radious){
+    private void updateAtributes(float fireSpeed, float damage, float projectyleSpeed, float radious){
 
         this.fireSpeed = fireSpeed;
         this.damage = damage;
-        this.projectyleSpeed = bulletSpeed;
+        this.projectyleSpeed = projectyleSpeed;
         this.radious = radious;
 
-        projectyle.GetComponent<ProjectyleScript>().setup(bulletSpeed, damage, pierce);
+    }
+
+    private void fire(){
+
+        GameObject firedProjectyle = Instantiate<GameObject>(projectyle, transform.position, this.transform.rotation); 
+
+        firedProjectyle.GetComponent<ProjectyleScript>().setup(projectyleSpeed, damage, pierce);
+
+        cooldown = fireSpeed;
     }
 }

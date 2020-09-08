@@ -30,4 +30,11 @@ public class ProjectyleScript : MonoBehaviour
         pierce -= 1;
         return damage;
     }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.GetComponent<EnemyScript>()){
+            other.GetComponent<EnemyScript>()
+                .takeDamage(dealDamage());
+        }
+    }
 }

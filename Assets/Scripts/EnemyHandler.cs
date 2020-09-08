@@ -5,9 +5,13 @@ using UnityEngine;
 public class EnemyHandler : MonoBehaviour
 {
 
-    [SerializeField] private GameObject[] enemies;
+    [SerializeField] private List<GameObject> enemies;
 
-    public GameObject[] getEnemies(){
+    public List<GameObject> getEnemies(){
         return this.enemies;
+    }
+
+    public void removeEnemy(GameObject enemyToDelete){
+        enemies.Remove(enemyToDelete);
     }
 }
