@@ -24,8 +24,8 @@ public class PlayerControl : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
                 {
-                agent.SetDestination(hit.point);
-                 }
+                    agent.SetDestination(hit.point);
+                }
 
         }
     }
