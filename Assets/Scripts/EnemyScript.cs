@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class EnemyScript : MonoBehaviour
 {
@@ -13,10 +14,20 @@ public class EnemyScript : MonoBehaviour
 
     [SerializeField]private EnemyHandler enemyHandler;
 
+    private Transform goal;
+    AIDestinationSetter ai;
+
     // Start is called before the first frame update
     private void Start()
     {
         enemyHandler = FindObjectOfType<EnemyHandler>();
+        
+        
+        goal = GameObject.FindGameObjectWithTag("Goal").transform;
+        ai = GetComponent<AIDestinationSetter>();
+        ai.target = goal;
+       
+      
     }
 
     public float getHealth(){
@@ -26,6 +37,7 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     private void Update() //TODO deletar depois de testes
     {
+        /*
         if(Input.GetKeyDown(KeyCode.A)){
             transform.Translate(new Vector2(-moveSpeed,0));
         }
@@ -37,7 +49,15 @@ public class EnemyScript : MonoBehaviour
         }
         else if(Input.GetKeyDown(KeyCode.S)){
             transform.Translate(new Vector2(0,-moveSpeed));
+        }*/
+
+        if (Input.GetKeyDown(KeyCode.Space)) 
+        {
+
+            AstarPath.active.Scan();
         }
+
+
     }
 
     public void takeDamage(float damage){ //TODO separado por questões de dots e etcs tbm vão ter que passar por aqui, não só balas vão dar dano
