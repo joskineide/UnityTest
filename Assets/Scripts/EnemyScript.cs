@@ -29,7 +29,7 @@ public class EnemyScript : MonoBehaviour
     private void Update() {
         if(ai.reachedDestination){
             playerHandler.loseLives(1);
-            Destroy(this.gameObject);
+            die();
         }
     }
 
