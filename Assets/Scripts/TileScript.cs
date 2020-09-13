@@ -6,15 +6,19 @@ public class TileScript : MonoBehaviour
 {
     [SerializeField] private int posX = 1;
     [SerializeField] private int posY = 1;
-    // Start is called before the first frame update
-    void Start()
-    {
+
+    public void setPosition(int posX, int posY){
+        this.posX = posX;
+        this.posY = posY;
         this.gameObject.transform.position = new Vector2(posX, posY);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public int getPosX(){
+        return this.posX;
     }
+
+    public int getPosY(){
+        return this.posY;
+    }
+
 }

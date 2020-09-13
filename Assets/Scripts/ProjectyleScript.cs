@@ -41,8 +41,7 @@ public class ProjectyleScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.GetComponent<EnemyScript>()){
             other.GetComponent<EnemyScript>()
-                .takeDamage(1);
-            pierce--;
+                .takeDamage(dealDamage());
             if (pierce < 1)
                 Destroy(this.gameObject);
         }

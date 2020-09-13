@@ -5,72 +5,61 @@ using Pathfinding;
 
 public class EnemyScript : MonoBehaviour
 {
-
     [SerializeField] private float moveSpeed = 1;
-
     [SerializeField] private float health = 10;
+    [SerializeField] private int points = 1;
 
-    [SerializeField] private float points = 1;
-
-    [SerializeField]private EnemyHandler enemyHandler;
-
+    private EnemyHandler enemyHandler;
+    private PlayerHandlerScript playerHandler;
     private Transform goal;
-    AIDestinationSetter ai;
+    AIDestinationSetter destinationAi;
+    IAstarAI ai;
 
-    // Start is called before the first frame update
     private void Start()
     {
+        ai = this.GetComponent<IAstarAI>();
         enemyHandler = FindObjectOfType<EnemyHandler>();
-        
+        playerHandler = FindObjectOfType<PlayerHandlerScript>();
         
         goal = GameObject.FindGameObjectWithTag("Goal").transform;
-        ai = GetComponent<AIDestinationSetter>();
-        ai.target = goal;
-       
-      
+        destinationAi = GetComponent<AIDestinationSetter>();
+        destinationAi.target = goal;
+    }
+
+    private void Update() {
+        if(ai.reachedDestination){
+            playerHandler.loseLives(1);
+            Destroy(this.gameObject);
+        }
     }
 
     public float getHealth(){
         return this.health;
     }
 
-    // Update is called once per frame
-    private void Update() //TODO deletar depois de testes
-    {
-        /*
-        if(Input.GetKeyDown(KeyCode.A)){
-            transform.Translate(new Vector2(-moveSpeed,0));
-        }
-        else if(Input.GetKeyDown(KeyCode.D)){
-            transform.Translate(new Vector2(moveSpeed,0));
-        }
-        else if(Input.GetKeyDown(KeyCode.W)){
-            transform.Translate(new Vector2(0,moveSpeed));
-        }
-        else if(Input.GetKeyDown(KeyCode.S)){
-            transform.Translate(new Vector2(0,-moveSpeed));
-        }*/
-
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-
-            AstarPath.active.Scan();
-           
-        }
-
-
-    }
-
-    public void takeDamage(float damage){ //TODO separado por questões de dots e etcs tbm vão ter que passar por aqui, não só balas vão dar dano
+    public void takeDamage(float damage){ 
         this.health -= damage;
         if(this.health <= 0){
+            playerHandler.gainPoints(this.points);
             die();
         }
     }
 
-    private void die(){ //TODO fazer todo o esquema de pontos e etc...
+    private void die(){ 
         enemyHandler.removeEnemy(this.gameObject);
         Destroy(this.gameObject);
+    }
+
+    public float getDistanceFromGoal(){ 
+        return ai.remainingDistance;
+    }
+
+    public void updateStats(float moveSpeed, float health, int points, Color color){
+        this.moveSpeed = moveSpeed;
+        this.health = health;
+        this.points = points;
+        this.GetComponent<AIPath>().maxSpeed = moveSpeed;
+        this.GetComponent<SpriteRenderer>().color = color;
     }
 
 }

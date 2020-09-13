@@ -6,6 +6,8 @@ public class TurretScript : MonoBehaviour
 {
 
     private enum TurretTargetTypeEnum {First, Last, Close, Far, Healthy, Weak};
+    [SerializeField] private int cost = 10;
+    [SerializeField] private int upgradeCost = 100;
     [SerializeField] private float fireSpeed = 1;
     [SerializeField] private float damage = 1;
     [SerializeField] private float projectyleSpeed = 1;
@@ -17,17 +19,14 @@ public class TurretScript : MonoBehaviour
     [SerializeField] private GameObject projectyle;
     [SerializeField] private EnemyHandler enemyHandler;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         enemyHandler = FindObjectOfType<EnemyHandler>();
         updateAtributes(fireSpeed, damage, projectyleSpeed, radious);        
-
     }
 
-    // Update is called once per frame
-    void Update()
-    {
+    private void FixedUpdate() {
         if(cooldown > 0){
             cooldown -= Time.deltaTime;
             return;
@@ -42,7 +41,6 @@ public class TurretScript : MonoBehaviour
         lookAtTarget(currentEnemy.transform.position);
 
         fire();
-
     }
 
     private GameObject searchForTarget(){
@@ -100,14 +98,20 @@ public class TurretScript : MonoBehaviour
                 }
                 break;
             }
-             case TurretTargetTypeEnum.First: //TODO
+            case TurretTargetTypeEnum.First:
             {
-                return currentTarget;
+                if(newTarget.GetComponent<EnemyScript>().getDistanceFromGoal() <
+                    currentTarget.GetComponent<EnemyScript>().getDistanceFromGoal()){
+                    return newTarget;
+                }
                 break;
             }
-             case TurretTargetTypeEnum.Last: //TODO
+            case TurretTargetTypeEnum.Last: 
             {
-                return newTarget;
+                if(newTarget.GetComponent<EnemyScript>().getDistanceFromGoal() >
+                    currentTarget.GetComponent<EnemyScript>().getDistanceFromGoal()){
+                    return newTarget;
+                }
                 break;
             }
             default: return currentTarget;
@@ -137,5 +141,32 @@ public class TurretScript : MonoBehaviour
         firedProjectyle.GetComponent<ProjectyleScript>().setup(projectyleSpeed, damage, pierce);
 
         cooldown = fireSpeed;
+    }
+
+    public int getCost(){
+        return this.cost;
+    }
+
+    public int getUpgradeCost(){
+        return this.upgradeCost;
+    }
+
+    public void addDamage(float damage){
+        this.damage += damage;
+    }
+    public void addRange(float radious){
+        this.radious += radious;
+    }
+    public void addPierce(int pierce){
+        this.pierce += 1;
+    }
+    public void addProjectyleSpeed(float projectyleSpeed){
+        if(this.projectyleSpeed > 10f){
+            return;
+        }
+        this.projectyleSpeed += projectyleSpeed;
+    }
+    public void addFireRatio(float fireSpeed){
+        this.fireSpeed = this.fireSpeed * (1 - fireSpeed / 100);
     }
 }

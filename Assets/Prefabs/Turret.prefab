@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1540729193
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 3669649057611376950, guid: 0ac5cd37b54fdb04bbc4959025ecaaef, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -111,13 +111,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e17c8fa6c77a6048ad8df532457d830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cost: 10
+  upgradeCost: 100
   fireSpeed: 1
   damage: 1
-  bulletSpeed: 1
-  radious: 1
-  cooldown: 0
+  projectyleSpeed: 1
+  pierce: 1
+  radious: 10
+  cooldown: 1
+  turretTargetType: 2
   currentEnemy: {fileID: 0}
-  projectyle: {fileID: 0}
+  projectyle: {fileID: 234588276547944313, guid: b86a29218dec55144bb15b5bf348c3ca, type: 3}
   enemyHandler: {fileID: 0}
 --- !u!114 &5774050986925685457
 MonoBehaviour:
