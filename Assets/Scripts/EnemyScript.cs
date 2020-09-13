@@ -55,6 +55,7 @@ public class EnemyScript : MonoBehaviour
         {
 
             AstarPath.active.Scan();
+           
         }
 
 
