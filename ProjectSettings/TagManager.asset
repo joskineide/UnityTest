@@ -42,3 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: MainObject
+    uniqueID: 2754238103
+    locked: 0
+  - name: Projectyle
+    uniqueID: 3438460129
+    locked: 0

@@ -11,11 +11,14 @@ public class ProjectyleScript : MonoBehaviour
     private float timeToLive =  10;
 
     // Update is called once per frame
+    private void Start(){
+        Destroy(this.gameObject, timeToLive);
+    }
+
     void Update()
     {
         transform.Translate(new Vector2(0, speed * Time.deltaTime));
-        timeToLive -= Time.deltaTime;
-        if(timeToLive <= 0 || pierce <= 0){
+        if(pierce <= 0){
             Destroy(this.gameObject);
         }
     }
@@ -27,6 +30,10 @@ public class ProjectyleScript : MonoBehaviour
     }
 
     public float dealDamage(){
+        if(pierce <= 0){
+            Destroy(this.gameObject);
+            return 0;
+        }
         pierce -= 1;
         return damage;
     }
